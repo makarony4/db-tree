@@ -1,0 +1,24 @@
+services:
+  db:
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=tree
+      - MYSQL_USER=admin_root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=!ChangeMe!
+    volumes:
+      - ./docker/db/data:/var/lib/mysql/:rw
+    ports:
+      - "3307:3306"
+  php:
+#    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - ./:/var/www/
+    environment:
+      PHP_IDE_CONFIG: "serverName=tree"
+    depends_on:
+      - db
